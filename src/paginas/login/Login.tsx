@@ -1,26 +1,83 @@
-import React from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { Grid, Typography, Button } from "@material-ui/core";
 import { Box, TextField } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useLocalStorage from "react-use-localstorage";
+import { api } from "../../service/Service";
+import UserLogin from "../../models/UserLogin";
 import "./Login.css";
 
+
 function Login() {
+  //Usestate- Para manipulação dos valores de estado de um componente
+
+  let history = useNavigate();
+  const [token, setToken]= useLocalStorage('token');
+  const [userLogin,setUserLogin] = useState<UserLogin>(
+    //userLogin- Acessar valor no state; setUserLogin-Alterar valor no state
+
+    {
+      //Valores iniciais do state
+      id: 0,
+      nome: "",
+      usuario: "",
+      senha: "",
+      foto: "",
+      token: "",
+    }
+  );
+  //UpdateModel- Atualização da model (em conjunto com o state)
+  function updatedModel(e: ChangeEvent<HTMLInputElement>){
+    setUserLogin({
+      ...userLogin,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  
+
+  async function onSubmit(e: ChangeEvent<HTMLFormElement>){
+
+    e.preventDefault();
+
+    try {
+      const resposta = await api.post(`/usuarios/logar`, userLogin)
+      setToken(resposta.data.token)
+
+      alert('Usuário logado com sucesso ');
+    } catch (error) {
+
+      alert('Erro ao logar. Dados equivocados.');
+      
+    }
+
+  }
+
+  useEffect(()=>{
+    if (token !== ''){
+      history('/home');
+    } 
+  }, [token]);
+
+
   return (
     <Grid container direction="row" justifyContent="center" alignItems="center">
       <Grid alignItems="center" xs={6}>
         <Box paddingX={20}>
-          <form>
+          <form onSubmit={onSubmit}>
             <Typography
               variant="h3"
               gutterBottom
               color="textPrimary"
               component="h3"
               align="center"
-              className='textos'
+              className="textos"
             >
               Entrar
             </Typography>
             <TextField
+            value={userLogin.usuario}
+            onChange={(e:ChangeEvent<HTMLInputElement>)=> updatedModel(e)}
               id="usuario"
               label="usuario"
               variant="outlined"
@@ -29,6 +86,8 @@ function Login() {
               fullWidth
             />
             <TextField
+            value={userLogin.senha}
+            onChange={(e:ChangeEvent<HTMLInputElement>)=> updatedModel(e)}
               id="senha"
               label="senha"
               variant="outlined"
@@ -38,34 +97,36 @@ function Login() {
               fullWidth
             />
             <Box marginTop={2} alignItems="center">
-              <Link to="/home" className="text-decorator-none">
                 <Button type="submit" variant="contained" color="primary">
                   Logar
                 </Button>
-              </Link>
             </Box>
-          </form>
+          </form >
           <Box display="flex" justifyContent="center" marginTop={2}>
             <Box marginRight={1}>
-              <Typography variant="subtitle1" gutterBottom align="center" className='textos'>
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                align="center"
+                className="textos"
+              >
                 Não tem uma conta?
               </Typography>
             </Box>
-            <Typography
-              variant="subtitle1"
-              gutterBottom
-              align="center"
-              className='textos1'
-            >
-              Cadastre-se
-            </Typography>
+            <Link to="CadastroUsuario">
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                align="center"
+                className="textos1"
+              >
+                Cadastre-se
+              </Typography>
+            </Link>
           </Box>
         </Box>
       </Grid>
-      <Grid
-        xs={6}
-        className='imagem'
-      ></Grid>
+      <Grid xs={6} className="imagem"></Grid>
     </Grid>
   );
 }
