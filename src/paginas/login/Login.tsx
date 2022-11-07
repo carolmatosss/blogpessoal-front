@@ -3,7 +3,7 @@ import { Grid, Typography, Button } from "@material-ui/core";
 import { Box, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "react-use-localstorage";
-import { api } from "../../service/Service";
+import { login } from "../../service/Service";
 import UserLogin from "../../models/UserLogin";
 import "./Login.css";
 
@@ -41,8 +41,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const resposta = await api.post(`/usuarios/logar`, userLogin)
-      setToken(resposta.data.token)
+      await login(`/usuarios/logar`, userLogin, setToken)
 
       alert('Usuário logado com sucesso ');
     } catch (error) {
