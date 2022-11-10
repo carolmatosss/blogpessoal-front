@@ -1,12 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Box, Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
 import './ListaTema.css';
+import Tema from '../../../models/Tema';
+import useLocalStorage from 'react-use-localstorage';
+import { busca } from '../../../service/Service';
 
 function ListaTema() {
 
-  return (
+  let navigate= useNavigate();
+const [temas, setTemas]= useState<Tema[]>([]);
+const [token, setToken] = useLocalStorage ('token');
+
+useEffect(() =>{
+  if (token == ''){
+    alert('Você precisa estar logado')
+    navigate("/login")
+  }
+}, [token])
+
+async function getTema(){
+  await busca('/tema', setTemas, {
+    headers:{
+      'Authorization': token
+    }
+  })
+}
+
+useEffect(()=> {
+  getTema()
+  }, [temas.length])
+return (
     <>
+    {
+      temas.map(tema =>(
       <Box m={2} >
         <Card variant="outlined">
           <CardContent>
@@ -14,13 +41,13 @@ function ListaTema() {
               Tema
             </Typography>
             <Typography variant="h5" component="h2">
-              Minha descrição
+              (tema.descricao)
             </Typography>
           </CardContent>
           <CardActions>
             <Box display="flex" justifyContent="center" mb={1.5} >
 
-              <Link to="" className="text-decorator-none">
+              <Link to={`/formulatrioTema/${tema.id}`} className="text-decorator-none">
                 <Box mx={1}>
                   <Button variant="contained" className="marginLeft" size='small' color="primary" >
                     atualizar
@@ -38,6 +65,8 @@ function ListaTema() {
           </CardActions>
         </Card>
       </Box>
+      ))
+}
     </>
   );
 }
