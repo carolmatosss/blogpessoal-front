@@ -1,9 +1,6 @@
-
-
-
 .cursor{
-    cursor:'pointer';
-    color:'white'
+    cursor:'pointer' !important;
+    color: white;
 
 }
 
