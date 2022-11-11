@@ -26,9 +26,9 @@ function ListaTema() {
   }, [token]);
 
   async function getTema() {
-    await busca("/tema", setTemas, {
+    await busca("/temas", setTemas, {
       headers: {
-        Authorization: token,
+        'Authorization': token,
       },
     });
   }
@@ -46,7 +46,7 @@ function ListaTema() {
                 Tema
               </Typography>
               <Typography variant="h5" component="h2">
-                (tema.descricao)
+                {tema.descricao}
               </Typography>
             </CardContent>
             <CardActions>
@@ -66,7 +66,7 @@ function ListaTema() {
                     </Button>
                   </Box>
                 </Link>
-                <Link to="" className="text-decorator-none">
+                <Link to={`/deletarTema/${tema.id}`} className="text-decorator-none">
                   <Box mx={1}>
                     <Button variant="contained" size="small" color="secondary">
                       deletar
