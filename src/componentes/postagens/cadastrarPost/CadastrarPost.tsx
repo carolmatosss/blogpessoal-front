@@ -3,19 +3,32 @@ import { Container, Typography, TextField, Button, Select, InputLabel, MenuItem,
 import './CadastrarPost.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Tema from '../../../models/Tema';
-import useLocalStorage from 'react-use-localstorage';
+
 import Postagem from '../../../models/Postagem';
 import { busca, buscaId, post, put } from '../../../service/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/TokensReduce';
+import { toast } from 'react-toastify';
 
 function CadastroPost() {
     let navigate = useNavigate();
     const {id}= useParams<{id: string}>();
-    const [token, setToken]= useLocalStorage('token');
     const [temas, setTemas] = useState<Tema[]>([])
+    const token = useSelector<TokenState,TokenState["tokens"]>((state)=> state.tokens);
     
     useEffect(() => {
-        if (token === "") {
-          alert("Você precisa estar logado");
+        if (token == "") {
+            toast.error("Você precisa estar logado", {
+                position:"top-right",
+                autoClose:3000,
+                hideProgressBar: false,
+                closeOnClick:true,
+                pauseOnHover:false,
+                draggable:false,
+                theme:"colored",
+                progress: undefined,
+          
+              });
           navigate("/login");
         }
       }, [token]);
@@ -82,14 +95,34 @@ async function onSubmit(e: ChangeEvent<HTMLFormElement>){
             }
 
         })
-        alert("Postagem atualizada com sucesso");
+        toast.success("Postagem atualizada com sucesso", {
+            position:"top-right",
+            autoClose:3000,
+            hideProgressBar: false,
+            closeOnClick:true,
+            pauseOnHover:false,
+            draggable:false,
+            theme:"colored",
+            progress: undefined,
+      
+          });
     }else{
         post(`/postagens`, postagem, setPostagem,{
             headers:{
                 'Authorization': token
             }
         })
-        alert("Postagem cadastrada com sucesso")
+        toast.success("Postagem cadastrada com sucesso", {
+            position:"top-right",
+            autoClose:3000,
+            hideProgressBar: false,
+            closeOnClick:true,
+            pauseOnHover:false,
+            draggable:false,
+            theme:"colored",
+            progress: undefined,
+      
+          });
     }
 
     back()

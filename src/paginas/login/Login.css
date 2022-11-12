@@ -1,18 +1,38 @@
 
 .textos{
     font-weight: bold !important;
+    color: rgb(4, 94, 4);
+    font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif!important;
+}
+
+.fundo{
+    background-color: #0E1116;
+}
+
+.caixa{
+border: white !important;
+ background:none!important;
+ ;
+
 }
 
 .imagem{
-        background-image: url(https://i.imgur.com/d5bMdDJ.jpg);
-        background-repeat: no-reapeat;
+        background-image: url(https://i.imgur.com/IJrsRi2.png);
+        background-repeat: no-repeat !important;
         width: 100vh;
         min-height: 100vh;
-        background-size: cover;
-        background-position: center;
+        background-size:contain;
+        background-position:right;
       
 }
 
+
+.btn{
+    background: hsl(50, 100%, 41%) !important;
+    color: rgb(4, 94, 4)!important;
+    font-weight: bold !important;
+  }
+  
 .text-decorator-none{
     text-decoration:none ;
 }

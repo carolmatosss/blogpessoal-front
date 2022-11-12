@@ -5,6 +5,7 @@ import { Grid, Typography, Button, TextField } from "@material-ui/core";
 import { Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import "./CadastroUsuario.css";
+import { toast } from "react-toastify";
 
 function CadastroUsuario() {
   let navigate = useNavigate();
@@ -47,14 +48,44 @@ function CadastroUsuario() {
         // caso senhas ok, tenta cadastrar no backend
         try {
           await cadastroUsuario('/usuarios/cadastrar', user, setUserResult);
-          alert('Usuário cadastrado com sucesso'); //msg em caso de sucesso
+          toast.success("Usuário cadastrado com sucesso", {
+            position:"top-right",
+            autoClose:3000,
+            hideProgressBar: false,
+            closeOnClick:true,
+            pauseOnHover:false,
+            draggable:false,
+            theme:"colored",
+            progress: undefined,
+      
+          }); //msg em caso de sucesso
         } catch (error) {
-          alert('Falha interna ao cadastrar'); //caso de erro no backend, cai aqui
+          toast.error("Falha interna ao cadastrar", {
+            position:"top-right",
+            autoClose:3000,
+            hideProgressBar: false,
+            closeOnClick:true,
+            pauseOnHover:false,
+            draggable:false,
+            theme:"colored",
+            progress: undefined,
+      
+          }); //caso de erro no backend, cai aqui
           console.log(error);
         }
       } else {
         // msg de erro para o caso de não passar no if das senhas
-        alert('As senhas não conferem. Favor verificar novamente');
+        toast.error("As sehas não conferem", {
+          position:"top-right",
+          autoClose:3000,
+          hideProgressBar: false,
+          closeOnClick:true,
+          pauseOnHover:false,
+          draggable:false,
+          theme:"colored",
+          progress: undefined,
+    
+        });
   
         setUser({ ...user, senha: '' }); //zerar o campo de senha
         setConfirmarSenha(''); // zerar o campo de confirmar senha
